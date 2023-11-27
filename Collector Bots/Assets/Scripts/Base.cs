@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
+using System.Collections.Generic;
 
 public class Base : MonoBehaviour
 {
@@ -9,15 +9,12 @@ public class Base : MonoBehaviour
     [SerializeField] private Transform _collectorsPlace;
     [SerializeField] private Collector _collectorTemplate;
 
-    [SerializeField] private Vector3 _leftUpAreaPoint;
-    [SerializeField] private Vector3 _rightDownAreaPoint;
     [SerializeField] private LayerMask _resourcesLayer;
     [SerializeField] private Text _resourcesAmountText;
 
-    [SerializeField] private float _checkDelay;
-
     private Transform[] _collectorsPlaces;
     private Collector[] _collectors;
+    private Queue<Resource> _resources;
 
     public void GetResource(Resource resource)
     {
@@ -26,8 +23,14 @@ public class Base : MonoBehaviour
         Destroy(resource.gameObject);
     }
 
+    public void AddResourceToQueue(Resource resource)
+    {
+        _resources.Enqueue(resource);
+    }
+
     private void Start()
     {
+        _resources = new Queue<Resource>();
         ResourcesAmount = 0;
         _collectorsPlaces = new Transform[_collectorsPlace.childCount];
         _collectors = new Collector[_collectorsPlace.childCount];
@@ -40,40 +43,24 @@ public class Base : MonoBehaviour
         for (int i = 0; i < _collectorsPlaces.Length; i++)
         {
             _collectors[i] = Instantiate(_collectorTemplate, _collectorsPlaces[i].position, Quaternion.identity);
-            _collectors[i].HomePlace = _collectorsPlaces[i];
+            _collectors[i].SetData(_collectorsPlaces[i], this);
         }
-
-        StartCoroutine(CheckResources());
     }
 
-    private IEnumerator CheckResources()
+    private void Update()
     {
-        bool isWorking = enabled;
-
-        while (isWorking)
+        if (_resources.Count > 0)
         {
-            yield return new WaitForSeconds(_checkDelay);
-
-            Vector3 areaCenter = (_rightDownAreaPoint - _leftUpAreaPoint) / 2;
-            areaCenter.y = 0f;
-
-            float areaHalfWidth = Mathf.Abs(_rightDownAreaPoint.x - _leftUpAreaPoint.x);
-            float areaHalfLength = Mathf.Abs(_rightDownAreaPoint.z - _leftUpAreaPoint.z);
-            float areaHeight = 0.5f;
-
-
-            Collider[] resources = Physics.OverlapBox(areaCenter, new Vector3(areaHalfWidth, areaHeight, areaHalfLength), transform.rotation, _resourcesLayer);
-
-            int resourceIndex = 0;
-
-            if (resources.Length > 0)
+            foreach (var collector in _collectors)
             {
-                foreach (var collector in _collectors)
+                if (collector.Target == null)
                 {
-                    if (collector.Target == null)
-                    {
-                        collector.StartWorking(resources[resourceIndex++].transform, _resourcesLayer);
-                    }
+                    collector.StartWorking(_resources.Dequeue().transform, _resourcesLayer);
+                }
+
+                if (_resources.Count == 0)
+                {
+                    break;
                 }
             }
         }

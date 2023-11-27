@@ -4,13 +4,19 @@ public class Collector : MonoBehaviour
 {
     public Transform Target { get; private set; }
 
-    [HideInInspector] public Transform HomePlace;
-
     [SerializeField] private float _speed;
     [SerializeField] private Transform _resourcePlace;
 
-    private GameObject _resource;
+    private Resource _resource;
     private LayerMask _resourceLayer;
+    private Base _base;
+    private Transform _homePlace;
+
+    public void SetData(Transform homePlace, Base parent)
+    {
+        _base = parent;
+        _homePlace = homePlace;
+    }
 
     public void StartWorking(Transform target, LayerMask resourceLayer)
     {
@@ -19,9 +25,9 @@ public class Collector : MonoBehaviour
         RotateToTarget();
     }
 
-    public GameObject GiveResource()
+    public Resource GiveResource()
     {
-        GameObject takedResource = _resource;
+        Resource takedResource = _resource;
         _resource = null;
         return takedResource;
     }
@@ -32,20 +38,21 @@ public class Collector : MonoBehaviour
         {
             Vector3 targetPosition = new Vector3(Target.position.x, transform.position.y, Target.position.z);
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, _speed * Time.deltaTime);
-        }
 
-        if (_resource == null && TryGetResource(out GameObject resource))
-        {
-            TakeResource(resource);
-        }
+            if (_resource == null && TryGetResource(out Resource resource))
+            {
+                TakeResource(resource);
+            }
 
-        if (_resource != null && transform.position == HomePlace.position)
-        {
-            Target = null;
+            if (_resource != null && transform.position == _homePlace.position)
+            {
+                Target = null;
+                _base.GetResource(GiveResource());
+            }
         }
     }
 
-    private void TakeResource(GameObject resource)
+    private void TakeResource(Resource resource)
     {
         _resource = resource;
 
@@ -53,7 +60,7 @@ public class Collector : MonoBehaviour
         _resource.transform.parent = transform;
         _resource.transform.position = _resourcePlace.position;
 
-        Target = HomePlace;
+        Target = _homePlace;
         RotateToTarget();
     }
 
@@ -62,13 +69,13 @@ public class Collector : MonoBehaviour
         transform.forward = Target.position - transform.position;
     }
 
-    private bool TryGetResource(out GameObject resource)
+    private bool TryGetResource(out Resource resource)
     {
         Collider[] resources = Physics.OverlapBox(_resourcePlace.position, Vector3.one * 0.05f, transform.rotation, _resourceLayer);
 
         if (resources.Length > 0)
         {
-            resource = resources[0].gameObject;
+            resource = resources[0].GetComponent<Resource>();
             return true;
         }
 

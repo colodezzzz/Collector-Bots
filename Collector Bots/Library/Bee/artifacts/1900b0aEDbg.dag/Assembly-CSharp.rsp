@@ -358,6 +358,7 @@
 "Assets/Scripts/Base.cs"
 "Assets/Scripts/Collector.cs"
 "Assets/Scripts/Resource.cs"
+"Assets/Scripts/ResourceChecker.cs"
 "Assets/Scripts/ResourceSpawner.cs"
 -langversion:9.0
 
