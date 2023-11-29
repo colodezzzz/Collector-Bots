@@ -16,18 +16,6 @@ public class Base : MonoBehaviour
     private Collector[] _collectors;
     private Queue<Resource> _resources;
 
-    public void GetResource(Resource resource)
-    {
-        ResourcesAmount++;
-        _resourcesAmountText.text = ResourcesAmount.ToString();
-        Destroy(resource.gameObject);
-    }
-
-    public void AddResourceToQueue(Resource resource)
-    {
-        _resources.Enqueue(resource);
-    }
-
     private void Start()
     {
         _resources = new Queue<Resource>();
@@ -43,7 +31,7 @@ public class Base : MonoBehaviour
         for (int i = 0; i < _collectorsPlaces.Length; i++)
         {
             _collectors[i] = Instantiate(_collectorTemplate, _collectorsPlaces[i].position, Quaternion.identity);
-            _collectors[i].SetData(_collectorsPlaces[i], this);
+            _collectors[i].SetData(_collectorsPlaces[i], _resourcesLayer, this);
         }
     }
 
@@ -55,7 +43,7 @@ public class Base : MonoBehaviour
             {
                 if (collector.Target == null)
                 {
-                    collector.StartWorking(_resources.Dequeue().transform, _resourcesLayer);
+                    collector.StartWorking(_resources.Dequeue().transform);
                 }
 
                 if (_resources.Count == 0)
@@ -64,5 +52,17 @@ public class Base : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void GetResource(Resource resource)
+    {
+        ResourcesAmount++;
+        _resourcesAmountText.text = ResourcesAmount.ToString();
+        Destroy(resource.gameObject);
+    }
+
+    public void AddResourceToQueue(Resource resource)
+    {
+        _resources.Enqueue(resource);
     }
 }

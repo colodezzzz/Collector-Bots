@@ -21,6 +21,11 @@ public class ResourceSpawner : MonoBehaviour
         StartCoroutine(Spawn());
     }
 
+    private void OnDestroy()
+    {
+        StopCoroutine(Spawn());
+    }
+
     private IEnumerator Spawn()
     {
         bool isWorking = enabled;
@@ -35,6 +40,4 @@ public class ResourceSpawner : MonoBehaviour
             Instantiate(_resourceTemplate, _spawnPoints[pointIndex].position, Quaternion.identity);
         }
     }
-
-
 }
