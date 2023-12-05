@@ -8,16 +8,31 @@ public class Collector : MonoBehaviour
     private Base _base;
     private CollectorMovement _collectorMovement;
     private CollectorPicking _collectorPicking;
+    private bool _isCreatingBase;
 
     private void Awake()
     {
+        _isCreatingBase = false;
         _collectorMovement = GetComponent<CollectorMovement>();
         _collectorPicking = GetComponent<CollectorPicking>();
     }
 
     private void Update()
     {
-        if (_collectorPicking.CurrentResource != null && Vector3.Distance(transform.position, _homePlace.position) == 0)
+        if (_isCreatingBase)
+        {
+            Vector3 collectorPosition = transform.position;
+            collectorPosition.y = 0;
+
+            Vector3 targetPosition = Target.position;
+            targetPosition.y = 0;
+
+            if (Vector3.Distance(collectorPosition, targetPosition) == 0)
+            {
+                BuildBase();
+            }
+        }
+        else if (_collectorPicking.CurrentResource != null && Vector3.Distance(transform.position, _homePlace.position) == 0)
         {
             _base.GetResource(_collectorPicking.GiveResource());
             Target = null;
@@ -38,10 +53,27 @@ public class Collector : MonoBehaviour
         _collectorPicking.SetData(resourceLayer, this);
     }
 
-    public void StartWorking(Transform target)
+    public void StartCollecting(Transform target, Resource resource)
     {
-        _collectorPicking.StartChecking();
+        _collectorPicking.StartChecking(resource);
+        SetTarget(target);
+    }
+
+    public void StartBuildBase(Transform target)
+    {
+        _isCreatingBase = true;
+        SetTarget(target);
+    }
+
+    private void SetTarget(Transform target)
+    {
         Target = target;
         _collectorMovement.SetTarget(Target);
+    }
+
+    private void BuildBase()
+    {
+        _base.BuildBase(transform.position);
+        Destroy(gameObject);
     }
 }

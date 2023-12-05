@@ -9,6 +9,7 @@ public class CollectorPicking : MonoBehaviour
     private LayerMask _resourceLayer;
     private Collector _collector;
     private bool _isChecking;
+    private Resource _resourceToFind;
 
     private void Awake()
     {
@@ -29,15 +30,17 @@ public class CollectorPicking : MonoBehaviour
         _collector = collector;
     }
 
-    public void StartChecking()
+    public void StartChecking(Resource resource)
     {
         _isChecking = true;
+        _resourceToFind = resource;
     }
 
     public Resource GiveResource()
     {
         Resource returnedResource = CurrentResource;
         CurrentResource = null;
+        _resourceToFind = null;
         return returnedResource;
     }
 
@@ -57,10 +60,13 @@ public class CollectorPicking : MonoBehaviour
     {
         Collider[] resources = Physics.OverlapBox(_resourcePlace.position, Vector3.one * 0.05f, transform.rotation, _resourceLayer);
 
-        if (resources.Length > 0)
+        for (int i = 0; i < resources.Length; i++)
         {
-            resource = resources[0].GetComponent<Resource>();
-            return true;
+            if (resources[i].GetComponent<Resource>() == _resourceToFind)
+            {
+                resource = _resourceToFind;
+                return true;
+            }
         }
 
         resource = null;

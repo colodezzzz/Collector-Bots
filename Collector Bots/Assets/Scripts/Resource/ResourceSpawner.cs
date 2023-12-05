@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class ResourceSpawner : MonoBehaviour
 {
-    [SerializeField] private float _minResourceSpawnDelay;
-    [SerializeField] private float _maxResourceSpawnDelay;
+    [SerializeField] private float _minSpawnDelay;
+    [SerializeField] private float _maxSpawnDelay;
     [SerializeField] private Resource _resourceTemplate;
 
     private Transform[] _spawnPoints;
@@ -32,7 +32,7 @@ public class ResourceSpawner : MonoBehaviour
 
         while (isWorking)
         {
-            float seconds = Random.Range(_minResourceSpawnDelay, _maxResourceSpawnDelay);
+            float seconds = Random.Range(_minSpawnDelay, _maxSpawnDelay);
             yield return new WaitForSeconds(seconds);
 
             int pointIndex = Random.Range(0, _spawnPoints.Length);

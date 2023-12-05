@@ -358,13 +358,16 @@
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/UnityEngine.UI.ref.dll"
 -analyzer:"F:/Program Files/Unity/Hub/Editor/2022.3.7f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.Properties.SourceGenerator.dll"
 -analyzer:"F:/Program Files/Unity/Hub/Editor/2022.3.7f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
-"Assets/Scripts/Base.cs"
-"Assets/Scripts/Collector.cs"
-"Assets/Scripts/CollectorMovement.cs"
-"Assets/Scripts/CollectorPicking.cs"
-"Assets/Scripts/Resource.cs"
-"Assets/Scripts/ResourceChecker.cs"
-"Assets/Scripts/ResourceSpawner.cs"
+"Assets/Scripts/Base/Base.cs"
+"Assets/Scripts/Base/BaseController.cs"
+"Assets/Scripts/Base/ResourceChecker.cs"
+"Assets/Scripts/Collector/Collector.cs"
+"Assets/Scripts/Collector/CollectorMovement.cs"
+"Assets/Scripts/Collector/CollectorPicking.cs"
+"Assets/Scripts/Flag/Flag.cs"
+"Assets/Scripts/Flag/FlagSetter.cs"
+"Assets/Scripts/Resource/Resource.cs"
+"Assets/Scripts/Resource/ResourceSpawner.cs"
 -langversion:9.0
 
 /deterministic

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3575489529572610925}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Resource Place
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 1638196070418328003}
   - component: {fileID: 3883333304245571293}
   - component: {fileID: 3900008814256381419}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -150,7 +150,7 @@ GameObject:
   - component: {fileID: 970983655465564822}
   - component: {fileID: 4137530928524568229}
   - component: {fileID: 5037845444614876250}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Collector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -224,7 +224,7 @@ GameObject:
   - component: {fileID: 5799454707917380929}
   - component: {fileID: 2598902183706550156}
   - component: {fileID: 4021613927513652450}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Hand (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -329,7 +329,7 @@ GameObject:
   - component: {fileID: 3207285622478554837}
   - component: {fileID: 1974197382416358848}
   - component: {fileID: 530997886491733523}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
