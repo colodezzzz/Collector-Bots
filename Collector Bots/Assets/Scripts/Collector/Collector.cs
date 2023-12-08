@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(CollectorMovement), typeof(CollectorPicking))]
 public class Collector : MonoBehaviour
 {
     public Transform Target { get; private set; }

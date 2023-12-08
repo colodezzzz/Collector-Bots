@@ -5,6 +5,7 @@ public class CollectorPicking : MonoBehaviour
     public Resource CurrentResource { get; private set; }
 
     [SerializeField] private Transform _resourcePlace;
+    [SerializeField] private float _checkBoxScale = 0.05f;
 
     private LayerMask _resourceLayer;
     private Collector _collector;
@@ -49,22 +50,20 @@ public class CollectorPicking : MonoBehaviour
         _isChecking = false;
         CurrentResource = resource;
 
-        CurrentResource.GetComponent<Collider>().enabled = false;
-        CurrentResource.transform.parent = transform;
-        CurrentResource.transform.position = _resourcePlace.position;
+        CurrentResource.Taked(transform, _resourcePlace.position);
 
         _collector.GoHome();
     }
 
     private bool TryGetResource(out Resource resource)
     {
-        Collider[] resources = Physics.OverlapBox(_resourcePlace.position, Vector3.one * 0.05f, transform.rotation, _resourceLayer);
+        Vector3 checkBoxSize = Vector3.one * _checkBoxScale;
+        Collider[] resources = Physics.OverlapBox(_resourcePlace.position, checkBoxSize, transform.rotation, _resourceLayer);
 
         for (int i = 0; i < resources.Length; i++)
         {
-            if (resources[i].GetComponent<Resource>() == _resourceToFind)
+            if (resources[i].TryGetComponent<Resource>(out resource) && resource == _resourceToFind)
             {
-                resource = _resourceToFind;
                 return true;
             }
         }

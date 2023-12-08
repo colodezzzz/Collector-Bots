@@ -35,6 +35,26 @@ public class BaseController : MonoBehaviour
         CheckResources();
     }
 
+    public Collector GetCollectorTemplate()
+    {
+        return _collectorTemplate;
+    }
+
+    public int GetCollectorPrice()
+    {
+        return _collectorPrice;
+    }
+
+    public LayerMask GetResourceLayer()
+    {
+        return _resourcesLayer;
+    }
+
+    public int GetNewBasePrice()
+    {
+        return _newBasePrice;
+    }
+
     public Base CreateBase(Vector3 basePosition, int collectorsStartAmount = StartCollectorsAmount)
     {
         Base newBase = Instantiate(_basePrefab, basePosition, Quaternion.identity);
@@ -43,7 +63,7 @@ public class BaseController : MonoBehaviour
         baseDirection.y = 0;
         newBase.transform.forward = baseDirection;
 
-        newBase.SetData(_collectorTemplate, _collectorPrice, _resourcesLayer, collectorsStartAmount, _newBasePrice, this);
+        newBase.SetData(this, collectorsStartAmount);
 
         _bases.Add(newBase);
 

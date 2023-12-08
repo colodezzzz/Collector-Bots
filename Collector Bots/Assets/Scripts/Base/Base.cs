@@ -54,18 +54,19 @@ public class Base : MonoBehaviour
         StopCoroutine(StartBuildingBase());
     }
 
-    public void SetData(Collector collectorTemplate, int collectorPrice, LayerMask resourcesLayer, int startCollectorsAmount, int newBasePrice, BaseController baseController)
+    // более 3 компонентов не стоит передавать, создайте отдельный класс с этими полями и используйте его для хранения / передачи данных
+    public void SetData(BaseController baseController, int startCollectorsAmount)
     {
         _originalMaterial = _meshRenderer.material;
         ResourcesAmount = 0;
         _collectorsPlaces = new Transform[_collectorsPlace.childCount];
         _collectors = new Collector[_collectorsPlace.childCount];
 
-        _collectorTemplate = collectorTemplate;
-        _collectorPrice = collectorPrice;
-        _resourcesLayer = resourcesLayer;
+        _collectorTemplate = baseController.GetCollectorTemplate();
+        _collectorPrice = baseController.GetCollectorPrice();
+        _resourcesLayer = baseController.GetResourceLayer();
         _startCollectorsAmount = startCollectorsAmount;
-        _newBasePrice = newBasePrice;
+        _newBasePrice = baseController.GetNewBasePrice();
         _baseController = baseController;
 
         for (int i = 0; i < _collectorsPlaces.Length; i++)

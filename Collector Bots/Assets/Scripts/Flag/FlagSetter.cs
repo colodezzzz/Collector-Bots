@@ -1,6 +1,5 @@
 using UnityEngine;
 
-[RequireComponent(typeof(BaseController))]
 public class FlagSetter : MonoBehaviour
 {
     private const int SetFlagMouseButton = 0;
