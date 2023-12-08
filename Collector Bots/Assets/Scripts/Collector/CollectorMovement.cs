@@ -8,19 +8,33 @@ public class CollectorMovement : MonoBehaviour
     private Transform _target;
     private Vector3 _targetPosition;
 
+    private Coroutine _currentCoroutine;
+
     private void OnDisable()
     {
-        StopCoroutine(Move());
+        StopMoving();
+    }
+
+    private void OnDestroy()
+    {
+        StopMoving();
     }
 
     public void StartMoving()
     {
-        StartCoroutine(Move());
+        if (_currentCoroutine == null)
+        {
+            _currentCoroutine = StartCoroutine(Move());
+        }
     }
 
     private void StopMoving()
     {
-        StopCoroutine(Move());
+        if (_currentCoroutine != null)
+        {
+            StopCoroutine(_currentCoroutine);
+            _currentCoroutine = null;
+        }
     }
 
     private void RotateToTarget()
@@ -33,6 +47,7 @@ public class CollectorMovement : MonoBehaviour
         _target = target;
        _targetPosition = new Vector3(_target.position.x, transform.position.y, _target.position.z);
         RotateToTarget();
+        StartMoving();
     }
 
     public void UnsetTarget()

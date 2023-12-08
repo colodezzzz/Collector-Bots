@@ -3,13 +3,13 @@ using UnityEngine;
 [RequireComponent(typeof(CollectorMovement), typeof(CollectorPicking))]
 public class Collector : MonoBehaviour
 {
-    public Transform Target { get; private set; }
-
     private Transform _homePlace;
     private Base _base;
     private CollectorMovement _collectorMovement;
     private CollectorPicking _collectorPicking;
     private bool _isCreatingBase;
+
+    public Transform Target { get; private set; }
 
     private void Awake()
     {
@@ -58,7 +58,6 @@ public class Collector : MonoBehaviour
     {
         _collectorPicking.StartChecking(resource);
         SetTarget(target);
-        _collectorMovement.StartMoving();
     }
 
     public void StartBuildBase(Transform target)
@@ -71,6 +70,7 @@ public class Collector : MonoBehaviour
     {
         Target = target;
         _collectorMovement.SetTarget(Target);
+        _collectorMovement.StartMoving();
     }
 
     private void BuildBase()

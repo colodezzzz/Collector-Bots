@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class CollectorPicking : MonoBehaviour
 {
-    public Resource CurrentResource { get; private set; }
-
     [SerializeField] private Transform _resourcePlace;
     [SerializeField] private float _checkBoxScale = 0.05f;
 
@@ -11,6 +9,8 @@ public class CollectorPicking : MonoBehaviour
     private Collector _collector;
     private bool _isChecking;
     private Resource _resourceToFind;
+
+    public Resource CurrentResource { get; private set; }
 
     private void Awake()
     {

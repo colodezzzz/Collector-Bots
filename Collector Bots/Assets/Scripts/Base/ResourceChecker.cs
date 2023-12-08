@@ -1,23 +1,60 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(BaseController))]
+[RequireComponent(typeof(BaseCreator))]
 public class ResourceChecker : MonoBehaviour
 {
     [SerializeField] private float _checkAreaScale;
     [SerializeField] private LayerMask _resourceLayer;
     [SerializeField] private float _addingResourcesTime;
 
-    private BaseController _baseController;
+    private BaseCreator _baseCreator;
+    private Queue<Resource> _resources;
+    private Coroutine _addResourcesCoroutine;
 
     private void Awake()
     {
-        _baseController = GetComponent<BaseController>();
+        _baseCreator = GetComponent<BaseCreator>();
     }
 
     private void Start()
     {
-        StartCoroutine(AddNewResources());
+        _resources = new Queue<Resource>();
+        _addResourcesCoroutine = StartCoroutine(AddNewResources());
+    }
+
+    private void Update()
+    {
+        SendCollectorToResource();
+    }
+
+    private void OnDisable()
+    {
+        if (_addResourcesCoroutine != null)
+        {
+            StopCoroutine(_addResourcesCoroutine);
+        }
+    }
+
+    private void AddResourceToQueue(Resource resource)
+    {
+        _resources.Enqueue(resource);
+    }
+
+    private void SendCollectorToResource()
+    {
+        if (_resources.Count > 0)
+        {
+            foreach (Base currentBase in _baseCreator.Bases)
+            {
+                if (currentBase.HasFreeCollector())
+                {
+                    currentBase.SendCollector(_resources.Dequeue());
+                    return;
+                }
+            }
+        }
     }
 
     private IEnumerator AddNewResources()
@@ -37,7 +74,7 @@ public class ResourceChecker : MonoBehaviour
                 if (currentResource.IsMarked == false)
                 {
                     currentResource.Mark();
-                    _baseController.AddResourceToQueue(currentResource);
+                    AddResourceToQueue(currentResource);
                 }
             }
 

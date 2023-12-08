@@ -4,10 +4,6 @@ using System.Collections;
 
 public class Base : MonoBehaviour
 {
-    public int ResourcesAmount { get; private set; }
-    public Flag CurrentFlag { get; private set; }
-    public bool IsBuildingBase { get; private set; }
-
     [SerializeField] private Transform _collectorsPlace;
 
     [SerializeField] private Text _resourcesAmountText;
@@ -23,9 +19,14 @@ public class Base : MonoBehaviour
     private Collector[] _collectors;
     private Material _originalMaterial;
     private Collector _freeCollector;
-    private BaseController _baseController;
+    private BaseCreator _baseController;
     private int _baseBuilderIndex;
     private int _collectorsAmount;
+    private Coroutine _startBuildingBaseCoroutine;
+
+    public int ResourcesAmount { get; private set; }
+    public Flag CurrentFlag { get; private set; }
+    public bool IsBuildingBase { get; private set; }
 
     private void Awake()
     {
@@ -36,7 +37,7 @@ public class Base : MonoBehaviour
 
     private void Update()
     {
-        CheckEvents();
+        StartBaseActions();
     }
 
     private void OnValidate()
@@ -46,16 +47,15 @@ public class Base : MonoBehaviour
 
     private void OnDestroy()
     {
-        StopCoroutine(StartBuildingBase());
+        StopCoroutines();
     }
 
-    private void OnEnable()
+    private void OnDisable()
     {
-        StopCoroutine(StartBuildingBase());
+        StopCoroutines();
     }
 
-    // более 3 компонентов не стоит передавать, создайте отдельный класс с этими полями и используйте его для хранения / передачи данных
-    public void SetData(BaseController baseController, int startCollectorsAmount)
+    public void SetData(BaseCreator baseController, int startCollectorsAmount)
     {
         _originalMaterial = _meshRenderer.material;
         ResourcesAmount = 0;
@@ -140,6 +140,7 @@ public class Base : MonoBehaviour
 
     public void BuildBase(Vector3 position)
     {
+        
         _collectors[_baseBuilderIndex] = null;
         _collectorsAmount--;
         _baseBuilderIndex = -1;
@@ -164,7 +165,7 @@ public class Base : MonoBehaviour
         }
     }
 
-    private void CheckEvents()
+    private void StartBaseActions()
     {
         _resourcesAmountText.text = ResourcesAmount.ToString();
 
@@ -174,7 +175,7 @@ public class Base : MonoBehaviour
             {
                 IsBuildingBase = true;
                 ResourcesAmount -= _newBasePrice;
-                StartCoroutine(StartBuildingBase());
+                _startBuildingBaseCoroutine = StartCoroutine(StartBuildingBase());
             }
         }
         else if (ResourcesAmount >= _collectorPrice && _collectorsAmount < _collectors.Length)
@@ -233,6 +234,14 @@ public class Base : MonoBehaviour
                     return;
                 }
             }
+        }
+    }
+
+    private void StopCoroutines()
+    {
+        if (_startBuildingBaseCoroutine != null)
+        {
+            StopCoroutine(_startBuildingBaseCoroutine);
         }
     }
 }

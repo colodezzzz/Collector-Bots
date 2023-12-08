@@ -3,9 +3,9 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))] 
 public class Resource : MonoBehaviour
 {
-    public bool IsMarked { get; private set; }
-
     private Collider _collider;
+
+    public bool IsMarked { get; private set; }
 
     private void Awake()
     {

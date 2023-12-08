@@ -944,14 +944,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _basePrefab: {fileID: 2655275240752254615, guid: b53061e58d9386f43a966a7916073ddf, type: 3}
+  _basePrice: 3
   _firstBasePlace: {fileID: 64229055}
+  _firstBaseCollectorsAmount: 3
   _resourcesLayer:
     serializedVersion: 2
     m_Bits: 64
   _collectorTemplate: {fileID: 970983655465564822, guid: 2d7c316eb5519364cb8ef8a8b7e00845, type: 3}
   _collectorPrice: 3
-  _firstBaseCollectorsAmount: 3
-  _newBasePrice: 5
 --- !u!114 &2007331960
 MonoBehaviour:
   m_ObjectHideFlags: 0
