@@ -58,6 +58,7 @@ public class Collector : MonoBehaviour
     {
         _collectorPicking.StartChecking(resource);
         SetTarget(target);
+        _collectorMovement.StartMoving();
     }
 
     public void StartBuildBase(Transform target)

@@ -62,11 +62,11 @@ public class Base : MonoBehaviour
         _collectorsPlaces = new Transform[_collectorsPlace.childCount];
         _collectors = new Collector[_collectorsPlace.childCount];
 
-        _collectorTemplate = baseController.GetCollectorTemplate();
-        _collectorPrice = baseController.GetCollectorPrice();
-        _resourcesLayer = baseController.GetResourceLayer();
+        _collectorTemplate = baseController.CollectorTemplate;
+        _collectorPrice = baseController.CollectorPrice;
+        _resourcesLayer = baseController.ResourcesLayer;
         _startCollectorsAmount = startCollectorsAmount;
-        _newBasePrice = baseController.GetNewBasePrice();
+        _newBasePrice = baseController.NewBasePrice;
         _baseController = baseController;
 
         for (int i = 0; i < _collectorsPlaces.Length; i++)
@@ -77,7 +77,7 @@ public class Base : MonoBehaviour
         CreateCollectors(_startCollectorsAmount);
     }
 
-    public bool TrySendCollector()
+    public bool HasFreeCollector()
     {
         for (int i = 0; i < _baseBuilderIndex; i++)
         {

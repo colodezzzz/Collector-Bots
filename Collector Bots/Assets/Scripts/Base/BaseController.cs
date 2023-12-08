@@ -5,6 +5,11 @@ public class BaseController : MonoBehaviour
 {
     private const int StartCollectorsAmount = 1;
 
+    public Collector CollectorTemplate { get; private set; }
+    public int CollectorPrice { get; private set; }
+    public LayerMask ResourcesLayer { get; private set; }
+    public int NewBasePrice { get; private set; }
+
     [SerializeField] private Base _basePrefab;
     [SerializeField] private Transform _firstBasePlace;
 
@@ -23,6 +28,11 @@ public class BaseController : MonoBehaviour
     {
         _resources = new Queue<Resource>();
         _bases = new List<Base>();
+
+        CollectorTemplate = _collectorTemplate;
+        CollectorPrice = _collectorPrice;
+        ResourcesLayer = _resourcesLayer;
+        NewBasePrice = _newBasePrice;
     }
 
     private void Start()
@@ -32,27 +42,7 @@ public class BaseController : MonoBehaviour
 
     private void Update()
     {
-        CheckResources();
-    }
-
-    public Collector GetCollectorTemplate()
-    {
-        return _collectorTemplate;
-    }
-
-    public int GetCollectorPrice()
-    {
-        return _collectorPrice;
-    }
-
-    public LayerMask GetResourceLayer()
-    {
-        return _resourcesLayer;
-    }
-
-    public int GetNewBasePrice()
-    {
-        return _newBasePrice;
+        SendCollectorToResource();
     }
 
     public Base CreateBase(Vector3 basePosition, int collectorsStartAmount = StartCollectorsAmount)
@@ -75,13 +65,13 @@ public class BaseController : MonoBehaviour
         _resources.Enqueue(resource);
     }
 
-    private void CheckResources()
+    private void SendCollectorToResource()
     {
         if (_resources.Count > 0)
         {
             foreach (Base currentBase in _bases)
             {
-                if (currentBase.TrySendCollector())
+                if (currentBase.HasFreeCollector())
                 {
                     currentBase.SendCollector(_resources.Dequeue());
                     return;

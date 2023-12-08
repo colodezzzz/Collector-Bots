@@ -1,8 +1,13 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(BaseController))]
 public class ResourceChecker : MonoBehaviour
 {
+    [SerializeField] private float _checkAreaScale;
+    [SerializeField] private LayerMask _resourceLayer;
+    [SerializeField] private float _addingResourcesTime;
+
     private BaseController _baseController;
 
     private void Awake()
@@ -10,11 +15,33 @@ public class ResourceChecker : MonoBehaviour
         _baseController = GetComponent<BaseController>();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void Start()
     {
-        if (other.TryGetComponent<Resource>(out Resource resource))
+        StartCoroutine(AddNewResources());
+    }
+
+    private IEnumerator AddNewResources()
+    {
+        WaitForSeconds waitTime = new WaitForSeconds(_addingResourcesTime);
+        bool isChecking = true;
+
+        while (isChecking)
         {
-            _baseController.AddResourceToQueue(resource);
+            Vector3 checkAreaSize = Vector3.one * _checkAreaScale;
+            Collider[] resources = Physics.OverlapBox(transform.position, checkAreaSize, transform.rotation, _resourceLayer);
+
+            foreach (Collider resource in resources)
+            {
+                Resource currentResource = resource.GetComponent<Resource>();
+
+                if (currentResource.IsMarked == false)
+                {
+                    currentResource.Mark();
+                    _baseController.AddResourceToQueue(currentResource);
+                }
+            }
+
+            yield return waitTime;
         }
     }
 }
