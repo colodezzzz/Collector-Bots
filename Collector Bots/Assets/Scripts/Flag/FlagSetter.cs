@@ -15,7 +15,7 @@ public class FlagSetter : MonoBehaviour
     private Flag _flag;
     private Base _base;
     private Ray _ray;
-    RaycastHit _hit;
+    private RaycastHit _hit;
 
     private void Awake()
     {
