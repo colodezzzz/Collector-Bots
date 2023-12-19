@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
+[RequireComponent(typeof(CollectorsCreater))]
 public class Base : MonoBehaviour
 {
     [SerializeField] private Transform _collectorsPlace;
@@ -10,8 +11,8 @@ public class Base : MonoBehaviour
 
     [SerializeField] private MeshRenderer _meshRenderer;
 
+    private CollectorsCreater _collectorsCreater;
     private LayerMask _resourcesLayer;
-    private int _startCollectorsAmount;
     private int _newBasePrice;
     private Collector _collectorTemplate;
     private int _collectorPrice;
@@ -33,16 +34,12 @@ public class Base : MonoBehaviour
         IsBuildingBase = false;
         _baseBuilderIndex = -1;
         _collectorsAmount = 0;
+        _collectorsCreater = GetComponent<CollectorsCreater>();
     }
 
     private void Update()
     {
         StartBaseActions();
-    }
-
-    private void OnValidate()
-    {
-        ValidateBotsStartAmount();
     }
 
     private void OnDestroy()
@@ -55,26 +52,27 @@ public class Base : MonoBehaviour
         StopCoroutines();
     }
 
-    public void SetData(BaseCreator baseController, int startCollectorsAmount)
+    public void SetData(BaseCreator baseCreater, int startCollectorsAmount)
     {
         _originalMaterial = _meshRenderer.material;
         ResourcesAmount = 0;
         _collectorsPlaces = new Transform[_collectorsPlace.childCount];
         _collectors = new Collector[_collectorsPlace.childCount];
 
-        _collectorTemplate = baseController.CollectorTemplate;
-        _collectorPrice = baseController.CollectorPrice;
-        _resourcesLayer = baseController.ResourcesLayer;
-        _startCollectorsAmount = startCollectorsAmount;
-        _newBasePrice = baseController.NewBasePrice;
-        _baseController = baseController;
+        _collectorTemplate = baseCreater.CollectorTemplate;
+        _collectorPrice = baseCreater.CollectorPrice;
+        _resourcesLayer = baseCreater.ResourcesLayer;
+        _newBasePrice = baseCreater.NewBasePrice;
+        _baseController = baseCreater;
+
+        //_collectorsCreater.SetData(_collectorsPlace, baseCreater, this);
 
         for (int i = 0; i < _collectorsPlaces.Length; i++)
         {
             _collectorsPlaces[i] = _collectorsPlace.GetChild(i);
         }
 
-        CreateCollectors(_startCollectorsAmount);
+        CreateCollectors(startCollectorsAmount);
     }
 
     public bool HasFreeCollector()
@@ -198,22 +196,6 @@ public class Base : MonoBehaviour
         }
 
         return false;
-    }
-
-    private void ValidateBotsStartAmount()
-    {
-        if (_collectorsPlace == null)
-        {
-            _startCollectorsAmount = 0;
-        }
-        else if (_startCollectorsAmount > _collectorsPlace.childCount)
-        {
-            _startCollectorsAmount = _collectorsPlace.childCount;
-        }
-        else if (_startCollectorsAmount < 0)
-        {
-            _startCollectorsAmount = 0;
-        }
     }
 
     private void CreateCollectors(int amount)
