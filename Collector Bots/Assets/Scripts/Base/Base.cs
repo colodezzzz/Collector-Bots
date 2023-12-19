@@ -12,17 +12,12 @@ public class Base : MonoBehaviour
     [SerializeField] private MeshRenderer _meshRenderer;
 
     private CollectorsCreater _collectorsCreater;
-    private LayerMask _resourcesLayer;
     private int _newBasePrice;
-    private Collector _collectorTemplate;
     private int _collectorPrice;
-    private Transform[] _collectorsPlaces;
-    private Collector[] _collectors;
     private Material _originalMaterial;
     private Collector _freeCollector;
     private BaseCreator _baseController;
     private int _baseBuilderIndex;
-    private int _collectorsAmount;
     private Coroutine _startBuildingBaseCoroutine;
 
     public int ResourcesAmount { get; private set; }
@@ -33,7 +28,6 @@ public class Base : MonoBehaviour
     {
         IsBuildingBase = false;
         _baseBuilderIndex = -1;
-        _collectorsAmount = 0;
         _collectorsCreater = GetComponent<CollectorsCreater>();
     }
 
@@ -56,41 +50,31 @@ public class Base : MonoBehaviour
     {
         _originalMaterial = _meshRenderer.material;
         ResourcesAmount = 0;
-        _collectorsPlaces = new Transform[_collectorsPlace.childCount];
-        _collectors = new Collector[_collectorsPlace.childCount];
 
-        _collectorTemplate = baseCreater.CollectorTemplate;
         _collectorPrice = baseCreater.CollectorPrice;
-        _resourcesLayer = baseCreater.ResourcesLayer;
         _newBasePrice = baseCreater.NewBasePrice;
         _baseController = baseCreater;
 
-        //_collectorsCreater.SetData(_collectorsPlace, baseCreater, this);
-
-        for (int i = 0; i < _collectorsPlaces.Length; i++)
-        {
-            _collectorsPlaces[i] = _collectorsPlace.GetChild(i);
-        }
-
-        CreateCollectors(startCollectorsAmount);
+        _collectorsCreater.SetData(_collectorsPlace, baseCreater, this);
+        _collectorsCreater.CreateCollectors(startCollectorsAmount);
     }
 
     public bool HasFreeCollector()
     {
         for (int i = 0; i < _baseBuilderIndex; i++)
         {
-            if (_collectors[i] != null && _collectors[i].Target == null)
+            if (_collectorsCreater.Collectors[i] != null && _collectorsCreater.Collectors[i].Target == null)
             {
-                _freeCollector = _collectors[i];
+                _freeCollector = _collectorsCreater.Collectors[i];
                 return true;
             }
         }
 
-        for (int i = _baseBuilderIndex + 1; i < _collectors.Length; i++)
+        for (int i = _baseBuilderIndex + 1; i < _collectorsCreater.Collectors.Length; i++)
         {
-            if (_collectors[i] != null && _collectors[i].Target == null)
+            if (_collectorsCreater.Collectors[i] != null && _collectorsCreater.Collectors[i].Target == null)
             {
-                _freeCollector = _collectors[i];
+                _freeCollector = _collectorsCreater.Collectors[i];
                 return true;
             }
         }
@@ -139,8 +123,8 @@ public class Base : MonoBehaviour
     public void BuildBase(Vector3 position)
     {
         
-        _collectors[_baseBuilderIndex] = null;
-        _collectorsAmount--;
+        //_collectors[_baseBuilderIndex] = null;
+        //_collectorsAmount--;
         _baseBuilderIndex = -1;
         IsBuildingBase = false;
         UnsetFlag();
@@ -176,47 +160,26 @@ public class Base : MonoBehaviour
                 _startBuildingBaseCoroutine = StartCoroutine(StartBuildingBase());
             }
         }
-        else if (ResourcesAmount >= _collectorPrice && _collectorsAmount < _collectors.Length)
+        else if (ResourcesAmount >= _collectorPrice && _collectorsCreater.CanCreateCollector)
         {
             ResourcesAmount -= _collectorPrice;
-            CreateCollectors(1);
+            _collectorsCreater.CreateCollectors(1);
         }
     }
 
     private bool TryStartBuildBase()
     {
-        for (int i = 0; i < _collectors.Length; i++)
+        for (int i = 0; i < _collectorsCreater.Collectors.Length; i++)
         {
-            if (_collectors[i] != null && _collectors[i].Target == null)
+            if (_collectorsCreater.Collectors[i] != null && _collectorsCreater.Collectors[i].Target == null)
             {
                 _baseBuilderIndex = i;
-                _collectors[i].StartBuildBase(CurrentFlag.transform);
+                _collectorsCreater.Collectors[i].StartBuildBase(CurrentFlag.transform);
                 return true;
             }
         }
 
         return false;
-    }
-
-    private void CreateCollectors(int amount)
-    {
-        int createdBots = 0;
-
-        for (int i = 0; i < _collectors.Length; i++)
-        {
-            if (_collectors[i] == null)
-            {
-                _collectors[i] = Instantiate(_collectorTemplate, _collectorsPlaces[i].position, transform.rotation);
-                _collectors[i].SetData(_collectorsPlaces[i], _resourcesLayer, this);
-                _collectorsAmount++;
-                createdBots++;
-
-                if (createdBots == amount)
-                {
-                    return;
-                }
-            }
-        }
     }
 
     private void StopCoroutines()

@@ -2,18 +2,19 @@ using UnityEngine;
 
 public class CollectorsCreater : MonoBehaviour
 {
-    private Collector[] _collectors;
     private Collector _collectorTemplate;
     private Transform[] _collectorsPlaces;
     private LayerMask _resourcesLayer;
     private int _collectorsAmount;
     private Base _base;
 
+    public Collector[] Collectors { get; private set; }
+
     public bool CanCreateCollector
     {
         get
         {
-            return _collectorsAmount < _collectors.Length;
+            return _collectorsAmount < Collectors.Length;
         }
     }
 
@@ -28,7 +29,7 @@ public class CollectorsCreater : MonoBehaviour
         _collectorTemplate = baseCreater.CollectorTemplate;
         _resourcesLayer = baseCreater.ResourcesLayer;
         _collectorsPlaces = new Transform[collectorsPlace.childCount];
-        _collectors = new Collector[collectorsPlace.childCount];
+        Collectors = new Collector[collectorsPlace.childCount];
 
         for (int i = 0; i < _collectorsPlaces.Length; i++)
         {
@@ -36,16 +37,16 @@ public class CollectorsCreater : MonoBehaviour
         }
     }
 
-    private void CreateCollectors(int amount)
+    public void CreateCollectors(int amount)
     {
         int createdBots = 0;
 
-        for (int i = 0; i < _collectors.Length; i++)
+        for (int i = 0; i < Collectors.Length; i++)
         {
-            if (_collectors[i] == null)
+            if (Collectors[i] == null)
             {
-                _collectors[i] = Instantiate(_collectorTemplate, _collectorsPlaces[i].position, transform.rotation);
-                _collectors[i].SetData(_collectorsPlaces[i], _resourcesLayer, _base);
+                Collectors[i] = Instantiate(_collectorTemplate, _collectorsPlaces[i].position, transform.rotation);
+                Collectors[i].SetData(_collectorsPlaces[i], _resourcesLayer, _base);
                 _collectorsAmount++;
                 createdBots++;
 
