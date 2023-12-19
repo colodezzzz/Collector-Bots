@@ -15,11 +15,6 @@ public class CollectorMovement : MonoBehaviour
         StopMoving();
     }
 
-    private void OnDestroy()
-    {
-        StopMoving();
-    }
-
     public void StartMoving()
     {
         if (_currentCoroutine == null)

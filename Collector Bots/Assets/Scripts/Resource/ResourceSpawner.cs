@@ -8,6 +8,7 @@ public class ResourceSpawner : MonoBehaviour
     [SerializeField] private Resource _resourceTemplate;
 
     private Transform[] _spawnPoints;
+    private float _waitTime;
 
     private void Start()
     {
@@ -21,19 +22,14 @@ public class ResourceSpawner : MonoBehaviour
         StartCoroutine(Spawn());
     }
 
-    private void OnDestroy()
-    {
-        StopCoroutine(Spawn());
-    }
-
     private IEnumerator Spawn()
     {
         bool isWorking = enabled;
 
         while (isWorking)
         {
-            float seconds = Random.Range(_minSpawnDelay, _maxSpawnDelay);
-            yield return new WaitForSeconds(seconds);
+            _waitTime = Random.Range(_minSpawnDelay, _maxSpawnDelay);
+            yield return new WaitForSeconds(_waitTime);
 
             int pointIndex = Random.Range(0, _spawnPoints.Length);
 

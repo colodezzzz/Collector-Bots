@@ -272,7 +272,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 115
+  controlID: 70
 --- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -459,7 +459,7 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 98410000
+      m_SelectedIDs: a04c0000
       m_LastClickedID: 0
       m_ExpandedIDs: 2afbffff
       m_RenameOverlay:
@@ -943,7 +943,7 @@ MonoBehaviour:
   m_Rotation:
     m_Target: {x: 0.44830155, y: -0.5486349, z: 0.45837602, w: 0.53659075}
     speed: 2
-    m_Value: {x: 0.44829872, y: -0.5486314, z: 0.45837313, w: 0.53658736}
+    m_Value: {x: -0.44830158, y: 0.54863495, z: -0.45837605, w: -0.53659075}
   m_Size:
     m_Target: 48.76168
     speed: 2
@@ -1115,7 +1115,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts/Collector
+    - Assets/Scripts/Resource
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
@@ -1123,15 +1123,15 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Scripts/Collector
+  - Assets/Scripts/Resource
   m_LastFoldersGridSize: 16
   m_LastProjectPath: F:\GitHub\Collector-Bots\Collector Bots
   m_LockTracker:
     m_IsLocked: 1
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: b25b0000
-    m_LastClickedID: 23474
+    m_SelectedIDs: b65b0000
+    m_LastClickedID: 23478
     m_ExpandedIDs: 00000000a25b0000a45b000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -1204,7 +1204,7 @@ MonoBehaviour:
       m_IsRenaming: 0
       m_OriginalEventType: 11
       m_IsRenamingFilename: 1
-      m_ClientGUIView: {fileID: 2}
+      m_ClientGUIView: {fileID: 12}
     m_CreateAssetUtility:
       m_EndAction: {fileID: 0}
       m_InstanceID: 0

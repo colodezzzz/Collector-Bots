@@ -12,11 +12,6 @@ public class BaseBuilder : MonoBehaviour
     private Coroutine _startBuildingBaseCoroutine;
     private int _baseBuilderIndex;
 
-    private void OnDestroy()
-    {
-        StopCoroutines();
-    }
-
     private void OnDisable()
     {
         StopCoroutines();

@@ -11,13 +11,7 @@ public class CollectorsCreater : MonoBehaviour
 
     public Collector[] Collectors { get; private set; }
 
-    public bool CanCreateCollector
-    {
-        get
-        {
-            return _collectorsAmount < Collectors.Length;
-        }
-    }
+    public bool CanCreateCollector => _collectorsAmount < Collectors.Length;
 
     private void Awake()
     {
