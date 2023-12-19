@@ -22,7 +22,7 @@ public class BaseBuilder : MonoBehaviour
         StopCoroutines();
     }
 
-    public void SetData(CollectorsCreater collectorsCreater, Base parentBase, BaseCreator baseCreater)
+    public void SetFields(CollectorsCreater collectorsCreater, Base parentBase, BaseCreator baseCreater)
     {
         _collectorsCreater = collectorsCreater;
         _base = parentBase;

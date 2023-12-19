@@ -25,7 +25,7 @@ public class CollectorPicking : MonoBehaviour
         }
     }
 
-    public void SetData(LayerMask resourceLayer, Collector collector)
+    public void SetFields(LayerMask resourceLayer, Collector collector)
     {
         _resourceLayer = resourceLayer;
         _collector = collector;

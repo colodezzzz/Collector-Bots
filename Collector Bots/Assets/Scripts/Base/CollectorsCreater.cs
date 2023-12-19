@@ -24,7 +24,7 @@ public class CollectorsCreater : MonoBehaviour
         _collectorsAmount = 0;
     }
 
-    public void SetData(Transform collectorsPlace, BaseCreator baseCreater, Base parentBase, BaseBuilder baseBuilder)
+    public void SetFields(Transform collectorsPlace, BaseCreator baseCreater, Base parentBase, BaseBuilder baseBuilder)
     {
         _base = parentBase;
         _baseBuilder = baseBuilder;
@@ -48,7 +48,7 @@ public class CollectorsCreater : MonoBehaviour
             if (Collectors[i] == null)
             {
                 Collectors[i] = Instantiate(_collectorTemplate, _collectorsPlaces[i].position, transform.rotation);
-                Collectors[i].SetData(_collectorsPlaces[i], _resourcesLayer, _base, _baseBuilder);
+                Collectors[i].SetFields(_collectorsPlaces[i], _resourcesLayer, _base, _baseBuilder);
                 _collectorsAmount++;
                 createdBots++;
 

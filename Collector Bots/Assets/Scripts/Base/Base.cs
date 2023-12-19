@@ -37,7 +37,7 @@ public class Base : MonoBehaviour
         StartBaseActions();
     }
 
-    public void SetData(BaseCreator baseCreater, int startCollectorsAmount)
+    public void SetFields(BaseCreator baseCreater, int startCollectorsAmount)
     {
         _originalMaterial = _meshRenderer.material;
         ResourcesAmount = 0;
@@ -46,10 +46,10 @@ public class Base : MonoBehaviour
         _newBasePrice = baseCreater.NewBasePrice;
         _baseController = baseCreater;
 
-        _collectorsCreater.SetData(_collectorsPlace, baseCreater, this, _baseBuilder);
+        _collectorsCreater.SetFields(_collectorsPlace, baseCreater, this, _baseBuilder);
         _collectorsCreater.CreateCollectors(startCollectorsAmount);
 
-        _baseBuilder.SetData(_collectorsCreater, this, _baseController);
+        _baseBuilder.SetFields(_collectorsCreater, this, _baseController);
     }
 
     public bool HasFreeCollector()

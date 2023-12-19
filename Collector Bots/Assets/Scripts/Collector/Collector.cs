@@ -48,12 +48,12 @@ public class Collector : MonoBehaviour
         _collectorMovement.SetTarget(Target);
     }
 
-    public void SetData(Transform homePlace, LayerMask resourceLayer, Base parent, BaseBuilder baseBuilder)
+    public void SetFields(Transform homePlace, LayerMask resourceLayer, Base parent, BaseBuilder baseBuilder)
     {
         _base = parent;
         _baseBuilder = baseBuilder;
         _homePlace = homePlace;
-        _collectorPicking.SetData(resourceLayer, this);
+        _collectorPicking.SetFields(resourceLayer, this);
     }
 
     public void StartCollecting(Transform target, Resource resource)

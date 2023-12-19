@@ -45,7 +45,7 @@ public class BaseCreator : MonoBehaviour
         baseDirection.y = 0;
         newBase.transform.forward = baseDirection;
 
-        newBase.SetData(this, collectorsStartAmount);
+        newBase.SetFields(this, collectorsStartAmount);
 
         Bases.Add(newBase);
 
