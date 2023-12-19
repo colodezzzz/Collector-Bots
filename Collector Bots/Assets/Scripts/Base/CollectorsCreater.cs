@@ -7,6 +7,7 @@ public class CollectorsCreater : MonoBehaviour
     private LayerMask _resourcesLayer;
     private int _collectorsAmount;
     private Base _base;
+    private BaseBuilder _baseBuilder;
 
     public Collector[] Collectors { get; private set; }
 
@@ -23,9 +24,10 @@ public class CollectorsCreater : MonoBehaviour
         _collectorsAmount = 0;
     }
 
-    public void SetData(Transform collectorsPlace, BaseCreator baseCreater, Base parentBase)
+    public void SetData(Transform collectorsPlace, BaseCreator baseCreater, Base parentBase, BaseBuilder baseBuilder)
     {
         _base = parentBase;
+        _baseBuilder = baseBuilder;
         _collectorTemplate = baseCreater.CollectorTemplate;
         _resourcesLayer = baseCreater.ResourcesLayer;
         _collectorsPlaces = new Transform[collectorsPlace.childCount];
@@ -46,7 +48,7 @@ public class CollectorsCreater : MonoBehaviour
             if (Collectors[i] == null)
             {
                 Collectors[i] = Instantiate(_collectorTemplate, _collectorsPlaces[i].position, transform.rotation);
-                Collectors[i].SetData(_collectorsPlaces[i], _resourcesLayer, _base);
+                Collectors[i].SetData(_collectorsPlaces[i], _resourcesLayer, _base, _baseBuilder);
                 _collectorsAmount++;
                 createdBots++;
 
@@ -56,5 +58,11 @@ public class CollectorsCreater : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void DeleteCollector(int collectorIndexToDelete)
+    {
+        _collectorsAmount--;
+        Collectors[collectorIndexToDelete] = null;
     }
 }

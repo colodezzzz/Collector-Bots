@@ -5,6 +5,7 @@ public class Collector : MonoBehaviour
 {
     private Transform _homePlace;
     private Base _base;
+    private BaseBuilder _baseBuilder;
     private CollectorMovement _collectorMovement;
     private CollectorPicking _collectorPicking;
     private bool _isCreatingBase;
@@ -47,9 +48,10 @@ public class Collector : MonoBehaviour
         _collectorMovement.SetTarget(Target);
     }
 
-    public void SetData(Transform homePlace, LayerMask resourceLayer, Base parent)
+    public void SetData(Transform homePlace, LayerMask resourceLayer, Base parent, BaseBuilder baseBuilder)
     {
         _base = parent;
+        _baseBuilder = baseBuilder;
         _homePlace = homePlace;
         _collectorPicking.SetData(resourceLayer, this);
     }
@@ -75,7 +77,7 @@ public class Collector : MonoBehaviour
 
     private void BuildBase()
     {
-        _base.BuildBase(transform.position);
+        _baseBuilder.BuildBase();
         Destroy(gameObject);
     }
 }

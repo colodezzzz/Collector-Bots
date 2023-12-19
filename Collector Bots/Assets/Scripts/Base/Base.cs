@@ -1,8 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 [RequireComponent(typeof(CollectorsCreater))]
+[RequireComponent(typeof(BaseBuilder))]
 public class Base : MonoBehaviour
 {
     [SerializeField] private Transform _collectorsPlace;
@@ -17,8 +17,8 @@ public class Base : MonoBehaviour
     private Material _originalMaterial;
     private Collector _freeCollector;
     private BaseCreator _baseController;
+    private BaseBuilder _baseBuilder;
     private int _baseBuilderIndex;
-    private Coroutine _startBuildingBaseCoroutine;
 
     public int ResourcesAmount { get; private set; }
     public Flag CurrentFlag { get; private set; }
@@ -29,21 +29,12 @@ public class Base : MonoBehaviour
         IsBuildingBase = false;
         _baseBuilderIndex = -1;
         _collectorsCreater = GetComponent<CollectorsCreater>();
+        _baseBuilder = GetComponent<BaseBuilder>();
     }
 
     private void Update()
     {
         StartBaseActions();
-    }
-
-    private void OnDestroy()
-    {
-        StopCoroutines();
-    }
-
-    private void OnDisable()
-    {
-        StopCoroutines();
     }
 
     public void SetData(BaseCreator baseCreater, int startCollectorsAmount)
@@ -55,8 +46,10 @@ public class Base : MonoBehaviour
         _newBasePrice = baseCreater.NewBasePrice;
         _baseController = baseCreater;
 
-        _collectorsCreater.SetData(_collectorsPlace, baseCreater, this);
+        _collectorsCreater.SetData(_collectorsPlace, baseCreater, this, _baseBuilder);
         _collectorsCreater.CreateCollectors(startCollectorsAmount);
+
+        _baseBuilder.SetData(_collectorsCreater, this, _baseController);
     }
 
     public bool HasFreeCollector()
@@ -120,73 +113,22 @@ public class Base : MonoBehaviour
         }
     }
 
-    public void BuildBase(Vector3 position)
-    {
-        
-        //_collectors[_baseBuilderIndex] = null;
-        //_collectorsAmount--;
-        _baseBuilderIndex = -1;
-        IsBuildingBase = false;
-        UnsetFlag();
-        _baseController.CreateBase(position);
-    }
-
-    private IEnumerator StartBuildingBase()
-    {
-        WaitForEndOfFrame waitTime = new WaitForEndOfFrame();
-        bool isWorking = true;
-
-        while (isWorking)
-        {
-            if (TryStartBuildBase())
-            {
-                break;
-            }
-
-            yield return waitTime;
-        }
-    }
-
     private void StartBaseActions()
     {
         _resourcesAmountText.text = ResourcesAmount.ToString();
 
-        if (CurrentFlag != null && IsBuildingBase == false)
+        if (CurrentFlag != null && _baseBuilder.IsBuildingBase == false)
         {
             if (ResourcesAmount >= _newBasePrice)
             {
-                IsBuildingBase = true;
                 ResourcesAmount -= _newBasePrice;
-                _startBuildingBaseCoroutine = StartCoroutine(StartBuildingBase());
+                _baseBuilder.StartBuildBase();
             }
         }
         else if (ResourcesAmount >= _collectorPrice && _collectorsCreater.CanCreateCollector)
         {
             ResourcesAmount -= _collectorPrice;
             _collectorsCreater.CreateCollectors(1);
-        }
-    }
-
-    private bool TryStartBuildBase()
-    {
-        for (int i = 0; i < _collectorsCreater.Collectors.Length; i++)
-        {
-            if (_collectorsCreater.Collectors[i] != null && _collectorsCreater.Collectors[i].Target == null)
-            {
-                _baseBuilderIndex = i;
-                _collectorsCreater.Collectors[i].StartBuildBase(CurrentFlag.transform);
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private void StopCoroutines()
-    {
-        if (_startBuildingBaseCoroutine != null)
-        {
-            StopCoroutine(_startBuildingBaseCoroutine);
         }
     }
 }
